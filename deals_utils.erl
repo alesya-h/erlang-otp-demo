@@ -7,7 +7,7 @@
 %%% Created : 28 Nov 2012 by Ales Guzik <>
 %%%-------------------------------------------------------------------
 -module(deals_utils).
--export([maybe_int_list_to_float/1, extract_add_deal_args/1, now_to_timestamp/1, date_and_time_to_timestamp/2, deal_to_html/1, deals_to_html/1]).
+-export([maybe_int_list_to_float/1, extract_add_deal_args/1, now_to_timestamp/1, date_and_time_to_timestamp/2, timestamp_to_date_and_time/1, deal_to_html/1, deals_to_html/1]).
 -include_lib ("yaws/include/yaws_api.hrl").
 -include("deal.hrl").
 
@@ -41,20 +41,38 @@ extract_add_deal_args(Arg) ->
 now_to_timestamp({Mega, S, _Micro}) ->
     1000000 * Mega + S.
 
-%% TODO: replace stub with implementation
 date_and_time_to_timestamp(DateStr, TimeStr) ->
-    now_to_timestamp(erlang:now()).
+    [YYYY, MM, DD] = string:tokens(DateStr, "-"),
+    [Hh,Mm,Ss] = string:tokens(TimeStr, ":"),
+    [Year,Month,Day,Hour,Minute,Second] = lists:map(fun list_to_integer/1, [YYYY,MM,DD,Hh,Mm,Ss]),
+    DateTime = {{Year,Month,Day},{Hour, Minute, Second}},
+    calendar:datetime_to_gregorian_seconds(DateTime) - calendar:datetime_to_gregorian_seconds(calendar:now_to_universal_time({0,0,0})).
 
 timestamp_to_date_and_time(Timestamp) ->
-    {"2012-11-28","11:00"}.
+    Now = {Timestamp div 1000000, Timestamp rem 1000000, 0},
+    {{Year, Month, Day},{Hour, Minute, Second}} = calendar:now_to_universal_time(Now),
+    {f("~w-~s~w-~w",[Year, prepend_with_zero(Month), Month, Day]),
+     f("~s~w:~s~w:~s~w",[prepend_with_zero(Hour), Hour,
+                         prepend_with_zero(Minute), Minute,
+                         prepend_with_zero(Second), Second ])}.
 
 deal_to_html(#deal{name=Name, timestamp=Timestamp, cost=Cost, quantity=Quantity}) ->
     {DateStr, TimeStr} = timestamp_to_date_and_time(Timestamp),
     {tr, [], [{td, [], Name},
               {td, [], DateStr},
               {td, [], TimeStr},
-              {td, [], lists:flatten(io_lib:format("~p",[Cost]))},
+              {td, [], f("~p",[Cost])},
               {td, [], integer_to_list(Quantity)}]}.
 
 deals_to_html(Deals) ->
     lists:map(fun deal_to_html/1, Deals).
+
+f(Template, Args) ->
+    lists:flatten(io_lib:format(Template,Args)).
+
+prepend_with_zero(Num) ->
+    if
+        Num >= 10 ->
+            "" ;
+        true -> "0"
+    end.
