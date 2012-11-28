@@ -1,0 +1,58 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <title>ECHO test task</title>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Deal processing</h1>
+      </header>
+      <div class="main">
+        <nav class="left-menu">
+          <ul>
+          <li><a href="/">Add</a></li>
+          <li><a href="/report">Report</a></li>
+          </ul>
+          <div class="clear"></div>
+        </nav>
+        <div class="content_">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th><th>Date/Time</th><th>Cost</th><th>Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              <form method="post" id="add_deal" action="/" onsubmit="return false;">
+                <tr class="input-row">
+                  <td><input name="name" type="text" placeholder="e.g. ECHO"/></td>
+                  <td><input name="datetime" type="datetime"/></td>
+                  <td><input name="cost" type="number" value="0" size="10"/></td>
+                  <td><input name="quantity" type="number" value="1" size="10"/></td>
+                  <td><input type="submit" value="Add"/></td>
+                </tr>
+              </form>
+              <erl>
+                deal_to_html({deal, Name, Timestamp, Cost, Quantity}) ->
+                    {tr, [], [{td, [], Name},{td, [], integer_to_list(Timestamp)},{td, [], lists:flatten(io_lib:format("~p",[Cost]))},{td, [], integer_to_list(Quantity)}]}.
+                out(_) ->
+                    {ehtml, lists:map(fun deal_to_html/1, deal_server:all_deals())}.
+                     %%  [
+                     %%   {deal, "ECHO", 1353402035, 12.0, 1200},
+                     %%   {deal, "ECHO", 1353402135, 14.0, 200},
+                     %%   {deal, "ECHO", 1353402235, 12.0, 12000},
+                     %%   {deal, "ECHO", 1353402335, 16.0, 100}
+                     %%  ])}.
+              </erl>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <footer>
+        &copy; Ales Guzik, 2012
+      </footer>
+    </div>
+  </body>
+</html>
