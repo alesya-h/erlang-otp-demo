@@ -12,7 +12,7 @@
       <div class="main">
         <nav class="left-menu">
           <ul>
-          <li><a href="/">Add</a></li>
+          <li><a href="/deals">Deals</a></li>
           <li><a href="/report">Report</a></li>
           </ul>
           <div class="clear"></div>

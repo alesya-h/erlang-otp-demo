@@ -1,0 +1,4 @@
+<erl>
+out(_Arg) ->
+    {redirect_local, "/deals.yaws"}.
+</erl>
