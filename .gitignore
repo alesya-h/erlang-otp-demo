@@ -2,3 +2,5 @@
 #*#
 *.beam
 *.dump
+*.access
+*.auth
