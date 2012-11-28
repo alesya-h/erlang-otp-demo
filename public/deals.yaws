@@ -12,41 +12,35 @@
       <div class="main">
         <nav class="left-menu">
           <ul>
-          <li><a href="/deals">Deals</a></li>
-          <li><a href="/report">Report</a></li>
+          <li><a href="/deals.yaws">Deals</a></li>
+          <li><a href="/report.yaws">Report</a></li>
           </ul>
           <div class="clear"></div>
         </nav>
         <div class="content_">
           <table>
-            <thead>
-              <tr>
-                <th>Name</th><th>Date/Time</th><th>Cost</th><th>Quantity</th>
+            <col><col><col><col><col><col>
+            <tr>
+              <th>Name</th><th>Date</th><th>Time</th><th>Cost</th><th>Quantity</th>
+            </tr>
+            <form method="post" id="add_deal" action="/deals.yaws" onsubmit="return true;">
+              <tr class="input-row">
+                <td><input required="required" name="name" type="text" placeholder="e.g. ECHO" autofocus /></td>
+                <td><input required="required" name="date" type="date"/></td>
+                <td><input required="required" name="time" type="time"/></td>
+                <td><input required="required" name="cost" type="number" step="any" min="0" value="0" size="10"/></td>
+                <td><input required="required" name="quantity" type="number" min="0" value="1" size="10"/></td>
+                <td><input required="required" type="submit" value="Add"/></td>
               </tr>
-            </thead>
-            <tbody>
-              <form method="post" id="add_deal" action="/" onsubmit="return false;">
-                <tr class="input-row">
-                  <td><input name="name" type="text" placeholder="e.g. ECHO"/></td>
-                  <td><input name="datetime" type="datetime"/></td>
-                  <td><input name="cost" type="number" value="0" size="10"/></td>
-                  <td><input name="quantity" type="number" value="1" size="10"/></td>
-                  <td><input type="submit" value="Add"/></td>
-                </tr>
-              </form>
-              <erl>
-                deal_to_html({deal, Name, Timestamp, Cost, Quantity}) ->
-                    {tr, [], [{td, [], Name},{td, [], integer_to_list(Timestamp)},{td, [], lists:flatten(io_lib:format("~p",[Cost]))},{td, [], integer_to_list(Quantity)}]}.
-                out(_) ->
-                    {ehtml, lists:map(fun deal_to_html/1, deal_server:all_deals())}.
-                     %%  [
-                     %%   {deal, "ECHO", 1353402035, 12.0, 1200},
-                     %%   {deal, "ECHO", 1353402135, 14.0, 200},
-                     %%   {deal, "ECHO", 1353402235, 12.0, 12000},
-                     %%   {deal, "ECHO", 1353402335, 16.0, 100}
-                     %%  ])}.
-              </erl>
-            </tbody>
+            </form>
+            <erl>
+              out(Arg) ->
+                  case deals_utils:extract_add_deal_args(Arg) of
+                      {ok, Deal} -> deal_server:add_deal(Deal);
+                      _ -> ok
+                  end,
+                  {ehtml, deals_utils:deals_to_html(deal_server:all_deals())}.
+            </erl>
           </table>
         </div>
       </div>

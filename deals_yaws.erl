@@ -1,3 +1,11 @@
+%%%-------------------------------------------------------------------
+%%% @author Ales Guzik <me@aguzik.net>
+%%% @copyright (C) 2012, Ales Guzik
+%%% @doc
+%%% Deal interface web server.
+%%% @end
+%%% Created : 27 Nov 2012 by Ales Guzik <me@aguzik.net>
+%%%-------------------------------------------------------------------
 -module(deals_yaws).
 -compile(export_all).
 

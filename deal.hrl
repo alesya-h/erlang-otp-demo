@@ -1,0 +1,1 @@
+-record(deal, {name, timestamp, cost, quantity}).

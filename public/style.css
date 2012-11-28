@@ -1,4 +1,3 @@
-* {margin: 0; padding: 0}
 a {color: teal; text-decoration: none;}
 
 header {
@@ -15,10 +14,10 @@ h1 {
     font-family: Helvetica;
 }
 
-input {
-    padding: 5px;
-    font-size: 10pt;
-}
+input {font-size: 10pt;}
+input[type="date"] {width: 120px;}
+input[type="time"] {width: 70px;}
+input[type="number"] {width: 70px;}
 
 table {
     border: 1px solid gray;
@@ -28,7 +27,7 @@ table {
 tr {
     min-height: 20px;
 }
-tr:nth-child(2n+3) {
+tr:nth-child(2n+5) {
     background: rgba(100,0,0,0.1);
 }
 
@@ -58,6 +57,10 @@ nav {
     background: white;
     border-bottom: 2px brown solid;
 }
+nav * {
+    margin: 0;
+    padding: 0;
+}
 nav ul li {
     display: block;
     margin: auto;
@@ -66,6 +69,7 @@ nav ul li {
     list-style-type: none;
     border-right: 2px brown solid;
 }
+
 nav ul li:last-child {
     border-right: none;
 }

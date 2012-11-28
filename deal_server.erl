@@ -11,24 +11,21 @@
 -behaviour(gen_server).
 
 %% API
--export([start_link/0, shutdown/0, add_deal/4, now_to_timestamp/1, all_deals/0]).
--record(deal, {name, timestamp, cost, quantity}).
+-export([start_link/0, shutdown/0, add_deal/1, all_deals/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
          terminate/2, code_change/3]).
 
+-include("deal.hrl").
 -define(SERVER, ?MODULE).
 
 %%%===================================================================
 %%% API
 %%%===================================================================
 
-add_deal(Name, Timestamp, Cost, Quantity) ->
-    gen_server:call({global, ?SERVER}, {add, Name, Timestamp, Cost, Quantity}).
-
-now_to_timestamp({Mega, S, _Micro}) ->
-    1000000 * Mega + S.
+add_deal(Deal) ->
+    gen_server:call({global, ?SERVER}, {add, Deal}).
 
 all_deals() ->
     gen_server:call({global, ?SERVER}, get_all).
@@ -79,7 +76,7 @@ init([]) ->
 %%                                   {stop, Reason, State}
 %% @end
 %%--------------------------------------------------------------------
-handle_call({add, Name, Timestamp, Cost, Quantity}, _From, Deals) ->
+handle_call({add, #deal{name=Name, timestamp=Timestamp, cost=Cost, quantity=Quantity}}, _From, Deals) when is_float(Cost), is_integer(Quantity) ->
     ets:insert(Deals, #deal{name=Name, timestamp=Timestamp, cost=Cost, quantity=Quantity}),
     {reply, ok, Deals};
 handle_call(get_all, _From, Deals) ->
