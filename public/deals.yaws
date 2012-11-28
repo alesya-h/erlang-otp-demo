@@ -35,11 +35,11 @@
             </form>
             <erl>
               out(Arg) ->
-                  case deals_utils:extract_add_deal_args(Arg) of
+                  case web_helper:extract_add_deal_args(Arg) of
                       {ok, Deal} -> deal_server:add_deal(Deal);
                       _ -> ok
                   end,
-                  {ehtml, deals_utils:deals_to_html(deal_server:all_deals())}.
+                  {ehtml, web_helper:deals_to_html(deal_server:all_deals())}.
             </erl>
           </table>
         </div>

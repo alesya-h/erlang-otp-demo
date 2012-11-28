@@ -9,14 +9,15 @@
 -module(deals_yaws).
 -compile(export_all).
 
-start() ->
-    {ok, spawn(?MODULE, run, [])}.
+start(Port) ->
+    {ok, spawn(?MODULE, run, [Port])}.
 
-run() ->
+run(Port) ->
+    io:format("~p (~p) is starting...~n", [?MODULE, self()]),
     Id = "deals_yaws",
     GconfList = [{id, Id}],
     Docroot = "./public",
-    SconfList = [{port, 3000},
+    SconfList = [{port, Port},
                  {servername, "deals_yaws"},
                  {listen, {0,0,0,0}},
                  {docroot, Docroot}],

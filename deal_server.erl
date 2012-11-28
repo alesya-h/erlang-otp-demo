@@ -60,6 +60,7 @@ shutdown() ->
 %%--------------------------------------------------------------------
 init([]) ->
     process_flag(trap_exit,true),
+    io:format("~p (~p) is starting...~n", [?MODULE, self()]),
     {ok, ets:new(deals, [duplicate_bag,{keypos, #deal.timestamp}])}.
 
 %%--------------------------------------------------------------------
@@ -76,7 +77,7 @@ init([]) ->
 %%                                   {stop, Reason, State}
 %% @end
 %%--------------------------------------------------------------------
-handle_call({add, #deal{name=Name, timestamp=Timestamp, cost=Cost, quantity=Quantity}}, _From, Deals) when is_float(Cost), is_integer(Quantity) ->
+handle_call({add, #deal{name=Name, timestamp=Timestamp, cost=Cost, quantity=Quantity}}, _From, Deals) when is_atom(Name), is_float(Cost), is_integer(Quantity) ->
     ets:insert(Deals, #deal{name=Name, timestamp=Timestamp, cost=Cost, quantity=Quantity}),
     {reply, ok, Deals};
 handle_call(get_all, _From, Deals) ->
