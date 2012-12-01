@@ -1,6 +1,6 @@
 .PHONY: build clean init run tags
 
-all: build
+all: build tags
 
 build: deal_server.beam deal_server_sup.beam deal_server_test.beam deal_system.beam deal_system_sup.beam deals_yaws.beam deals_yaws_sup.beam time_helper.beam web_helper.beam
 
