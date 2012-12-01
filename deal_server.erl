@@ -11,7 +11,7 @@
 -behaviour(gen_server).
 
 %% API
--export([start_link/0, shutdown/0, add_deal/1, all_deals/0]).
+-export([start_link/0, shutdown/0, add/1, get_all/0]).
 
 %% gen_server callbacks
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2,
@@ -24,10 +24,10 @@
 %%% API
 %%%===================================================================
 
-add_deal(Deal) ->
+add(Deal) ->
     gen_server:call({global, ?SERVER}, {add, Deal}).
 
-all_deals() ->
+get_all() ->
     gen_server:call({global, ?SERVER}, get_all).
 
 %%--------------------------------------------------------------------

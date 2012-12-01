@@ -2,7 +2,17 @@
 <html lang="en">
   <head>
     <title>ECHO test task</title>
+    <meta charset="utf8"/>
     <link rel="stylesheet" href="style.css" type="text/css" />
+    <script src="jquery-1.8.3.min.js"></script>
+    <script src="js-webshim.min/extras/modernizr-custom.js"></script>
+    <script src="js-webshim.min/polyfiller.js"></script>
+    <script>
+      $.webshims.polyfill(); //or load only specific features you need
+      $(function(){
+          //use all implemented API-features on DOM-ready
+      });
+    </script>
   </head>
   <body>
     <div class="container">
@@ -19,7 +29,6 @@
         </nav>
         <div class="content_">
           <table>
-            <col><col><col><col><col><col>
             <tr>
               <th>Name</th><th>Date</th><th>Time</th><th>Cost</th><th>Quantity</th>
             </tr>
@@ -36,10 +45,10 @@
             <erl>
               out(Arg) ->
                   case web_helper:extract_add_deal_args(Arg) of
-                      {ok, Deal} -> deal_server:add_deal(Deal);
+                      {ok, Deal} -> deal_server:add(Deal);
                       _ -> ok
                   end,
-                  {ehtml, web_helper:deals_to_html(deal_server:all_deals())}.
+                  {ehtml, web_helper:deals_to_html(deal_server:get_all())}.
             </erl>
           </table>
         </div>

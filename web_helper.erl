@@ -13,27 +13,37 @@ maybe_int_list_to_float(List) ->
     end.
 
 extract_add_deal_args(Arg) ->
-    case Arg of
-        #arg{req=#http_request{method='POST'}} ->
-            ReceivedData = {yaws_api:getvar(Arg, "name"),
-                            yaws_api:getvar(Arg, "date"),
-                            yaws_api:getvar(Arg, "time"),
-                            yaws_api:getvar(Arg, "cost"),
-                            yaws_api:getvar(Arg, "quantity")},
-            case ReceivedData of
-                {{ok, Name}, {ok, DateString},{ok, TimeString}, {ok, Cost}, {ok, Quantity}} ->
-                    {ok, #deal{name=list_to_atom(Name),
-                               timestamp=time_helper:date_and_time_to_timestamp(DateString, TimeString),
-                               cost=maybe_int_list_to_float(Cost),
-                               quantity=list_to_integer(Quantity)}};
-                _ -> undefined
-            end;
+    Result = (
+      catch
+          case Arg of
+              #arg{req=#http_request{method='POST'}} ->
+                  ReceivedData = {yaws_api:getvar(Arg, "name"),
+                                  yaws_api:getvar(Arg, "date"),
+                                  yaws_api:getvar(Arg, "time"),
+                                  yaws_api:getvar(Arg, "cost"),
+                                  yaws_api:getvar(Arg, "quantity")},
+                  case ReceivedData of
+                      {{ok, NameStr}, {ok, DateStr},{ok, TimeStr}, {ok, CostStr}, {ok, QuantityStr}} ->
+                          Name=list_to_atom(NameStr),
+                          Timestamp=time_helper:date_and_time_to_timestamp(DateStr, TimeStr),
+                          Cost=maybe_int_list_to_float(CostStr),
+                          Quantity=list_to_integer(QuantityStr),
+                          {ok, #deal{name=Name,
+                                     timestamp=Timestamp,
+                                     cost=Cost,
+                                     quantity=Quantity}};
+                      _ -> undefined
+                  end;
+              _ -> undefined
+          end),
+    case Result of
+        {ok, _Deal} -> Result;
         _ -> undefined
     end.
 
 deal_to_html(#deal{name=Name, timestamp=Timestamp, cost=Cost, quantity=Quantity}) ->
     {DateStr, TimeStr} = time_helper:timestamp_to_date_and_time(Timestamp),
-    {tr, [], [{td, [], Name},
+    {tr, [], [{td, [], atom_to_list(Name)},
               {td, [], DateStr},
               {td, [], TimeStr},
               {td, [], ?f("~p",[Cost])},
@@ -41,6 +51,3 @@ deal_to_html(#deal{name=Name, timestamp=Timestamp, cost=Cost, quantity=Quantity}
 
 deals_to_html(Deals) ->
     lists:map(fun deal_to_html/1, Deals).
-
-%% f(Template, Args) ->
-%%     lists:flatten(io_lib:format(Template,Args)).

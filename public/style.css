@@ -27,7 +27,7 @@ table {
 tr {
     min-height: 20px;
 }
-tr:nth-child(2n+5) {
+tr:nth-child(2n+3) {
     background: rgba(100,0,0,0.1);
 }
 
