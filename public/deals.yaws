@@ -35,8 +35,12 @@
             <form method="post" id="add_deal" action="/deals.yaws" onsubmit="return true;">
               <tr class="input-row">
                 <td><input required="required" name="name" type="text" placeholder="e.g. ECHO" autofocus /></td>
-                <td><input required="required" name="date" type="date"/></td>
-                <td><input required="required" name="time" type="time"/></td>
+                <erl>
+                  out(_Arg) ->
+                      {Date, Time} = time_helper:now_to_date_and_time(now()),
+                      {ehtml, [{td, [], {input, [{required, "required"}, {name, "date"}, {type, "date"}, {value, Date}], []}},
+                               {td, [], {input, [{required, "required"}, {name, "time"}, {type, "time"}, {value, Time}], []}}]}.
+                </erl>
                 <td><input required="required" name="cost" type="number" step="any" min="0" value="0" size="10"/></td>
                 <td><input required="required" name="quantity" type="number" min="0" value="1" size="10"/></td>
                 <td><input required="required" type="submit" value="Add"/></td>

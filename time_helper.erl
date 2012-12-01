@@ -1,5 +1,5 @@
 -module(time_helper).
--export([now_to_timestamp/1, date_and_time_to_timestamp/2, timestamp_to_date_and_time/1]).
+-export([now_to_timestamp/1, date_and_time_to_timestamp/2, now_to_date_and_time/1, timestamp_to_date_and_time/1]).
 -include("deal_system.hrl").
 
 now_to_timestamp({Mega, S, _Micro}) ->
@@ -27,6 +27,9 @@ timestamp_to_date_and_time(Timestamp) ->
      ?f("~s~w:~s~w:~s~w",[prepend_with_zero(Hour), Hour,
                          prepend_with_zero(Minute), Minute,
                          prepend_with_zero(Second), Second ])}.
+
+now_to_date_and_time(Now) ->
+    timestamp_to_date_and_time(now_to_timestamp(Now)).
 
 prepend_with_zero(Num) ->
     if
