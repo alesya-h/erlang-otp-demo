@@ -1,30 +1,20 @@
-.PHONY: build clean run
+.PHONY: build clean init run tags
 
 all: build
 
 build: deal_server.beam deal_server_sup.beam deal_server_test.beam deal_system.beam deal_system_sup.beam deals_yaws.beam deals_yaws_sup.beam time_helper.beam web_helper.beam
 
+clean:
+	rm *~ *.beam *.access *.auth *.log *.dump TAGS > /dev/null 2>&1|| true
+
+init:
+	cat test.in|awk '{printf "curl -d name=%s -d date=%s -d time=%s -d cost=%s -d quantity=%s localhost:8080/deals.yaws\n", "ECHO", "2012-12-01", $$1, $$2, $$3}'|sh
+
 run: build
 	erl -s deal_system
 
-clean:
-	rm *~ *.beam *.access *.auth *.log *.dump || true
+tags:
+	ctags -e *.hrl *.erl
 
-deal_server.beam:       deal_server.erl
-	erlc deal_server.erl
-deal_server_sup.beam:   deal_server_sup.erl
-	erlc deal_server_sup.erl
-deal_server_test.beam:  deal_server_test.erl
-	erlc deal_server_test.erl
-deal_system.beam:       deal_system.erl
-	erlc deal_system.erl
-deal_system_sup.beam:   deal_system_sup.erl
-	erlc deal_system_sup.erl
-deals_yaws.beam:        deals_yaws.erl
-	erlc deals_yaws.erl
-deals_yaws_sup.beam:    deals_yaws_sup.erl
-	erlc deals_yaws_sup.erl
-time_helper.beam:       time_helper.erl
-	erlc time_helper.erl
-web_helper.beam:        web_helper.erl
-	erlc web_helper.erl
+%.beam: %.erl
+	erlc $+

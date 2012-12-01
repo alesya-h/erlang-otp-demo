@@ -8,7 +8,7 @@
 %%%-------------------------------------------------------------------
 -module(deal_server_test).
 
--include("deal.hrl").
+-include("deal_system.hrl").
 -include_lib("eunit/include/eunit.hrl").
 
 add_test_() ->
