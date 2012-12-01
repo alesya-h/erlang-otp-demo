@@ -8,7 +8,7 @@ clean:
 	rm *~ *.beam *.access *.auth *.log *.dump TAGS > /dev/null 2>&1|| true
 
 init:
-	cat test.in|awk '{printf "curl -d name=%s -d date=%s -d time=%s -d cost=%s -d quantity=%s localhost:8080/deals.yaws\n", "ECHO", "2012-12-01", $$1, $$2, $$3}'|sh
+	cat test.in|awk '{printf "curl -d name=%s -d date=%s -d time=%s -d cost=%s -d quantity=%s localhost:8080/deals.yaws\n", "ECHO", "2012-12-01", $$1, $$2, $$3}'|sh &>/dev/null
 
 run: build
 	erl -s deal_system
