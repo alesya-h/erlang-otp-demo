@@ -11,7 +11,7 @@ init:
 	cat test.in|awk '{printf "curl -d name=%s -d date=%s -d time=%s -d cost=%s -d quantity=%s localhost:8080/deals.yaws\n", "ECHO", "2012-12-01", $$1, $$2, $$3}'|sh &>/dev/null
 
 run: build
-	erl -s deal_system
+	erl -sname deal_system -s deal_system -noinput
 
 tags:
 	ctags -e *.hrl *.erl
