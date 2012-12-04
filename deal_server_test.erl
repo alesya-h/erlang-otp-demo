@@ -23,13 +23,13 @@ add_test_() ->
 generate_add_tests() ->
     [
      fun() ->
-             ?_assertEqual(0, length(deals_server:all_deals()))
+             ?_assertEqual(0, length(deal_server:get_all()))
      end,
      fun() ->
              deal_server:add_deal(#deal{name="ECHO", timestamp=time_helper:now_to_timestamp(erlang:now()), cost=21.0, quantity=1100}),
              deal_server:add_deal(#deal{name="ECHO", timestamp=time_helper:now_to_timestamp(erlang:now()), cost=21.0, quantity=1100}),
              deal_server:add_deal(#deal{name="GOOG", timestamp=time_helper:now_to_timestamp(erlang:now()), cost=21.0, quantity=1100}),
-             ?_assertEqual(3, length(deals_server:all_deals()))
+             ?_assertEqual(3, length(deal_server:get_all()))
      end
     ].
 report_test_() ->
