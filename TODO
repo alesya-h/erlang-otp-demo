@@ -1,0 +1,4 @@
+TODO:
+[ ] Handle ets table transfer
+[ ] Add js api endpoints
+[ ] Save state of report settings between requests
