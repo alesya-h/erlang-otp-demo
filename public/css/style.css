@@ -27,7 +27,10 @@ table {
 tr {
     min-height: 20px;
 }
-tr:nth-child(2n+4) {
+.deals_page tr:nth-child(2n+4) {
+    background: rgba(100,0,0,0.1);
+}
+.report_page tr:nth-child(2n+1) {
     background: rgba(100,0,0,0.1);
 }
 

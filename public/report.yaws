@@ -22,7 +22,7 @@
       });
     </script>
   </head>
-  <body>
+  <body class="report_page">
     <div class="container">
       <header>
         <h1>Deal processing</h1>
@@ -53,11 +53,11 @@
                                {input, [{required, "required"}, {name, "to_time"}, {type, "time"}, {value, "23:59"}]}]}.
                 </erl>.
                 Each report entry should be exactly
-                <input class="pluralizer" required="required" name="by_months"  type="number" min="0" value="0" size="4"> month<span class="month_plural">s</span><!-- <sup><a href="#months_desc">*</a></sup> -->,
-                <input class="pluralizer" required="required" name="by_weeks"   type="number" min="0" value="1" size="2"> week<span class="week_plural">s</span>,
-                <input class="pluralizer" required="required" name="by_days"    type="number" min="0" value="0" size="2"> day<span class="day_plural">s</span>,
-                <input class="pluralizer" required="required" name="by_hours"   type="number" min="0" value="0" size="2"> hour<span class="hour_plural">s</span> and
-                <input class="pluralizer" required="required" name="by_minutes" type="number" min="0" value="0" size="2"> minute<span class="minute_plural">s</span> long.
+                <input class="pluralizer" required="required" name="by_months"  type="number" min="0" value="0" size="4"/> month<span class="month_plural">s</span><!-- <sup><a href="#months_desc">*</a></sup> -->,
+                <input class="pluralizer" required="required" name="by_weeks"   type="number" min="0" value="0" size="2"/> week<span class="week_plural">s</span>,
+                <input class="pluralizer" required="required" name="by_days"    type="number" min="0" value="0" size="2"/> day<span class="day_plural">s</span>,
+                <input class="pluralizer" required="required" name="by_hours"   type="number" min="0" value="1" size="2"/> hour<span class="hour_plural">s</span> and
+                <input class="pluralizer" required="required" name="by_minutes" type="number" min="0" value="0" size="2"/> minute<span class="minute_plural">s</span> long.
                 <br><input required="required" type="submit" value="Generate report"/>
           </form>
         </div>
