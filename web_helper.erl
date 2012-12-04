@@ -126,4 +126,4 @@ report_to_html(#report_in{from_timestamp=FromTimestamp, by_timestamp=ByTimestamp
                                                %% ]
                                          end , CurrentTimestamp + ByTimestamp}
                              end, {[], FromTimestamp}, Entries),
-    Rows.
+    lists:reverse(Rows).
