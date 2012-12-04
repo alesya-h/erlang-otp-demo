@@ -38,10 +38,6 @@
 -define(f(Template, Args),
         (.lists:flatten(io_lib:format(Template,Args)))).
 
--undef(P).
--define(P(Expr),
-        Expr).
-
 -undef(If).
 -define(If(Statement, PosResult, NegResult),
         if
