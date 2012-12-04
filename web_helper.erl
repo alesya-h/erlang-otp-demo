@@ -70,10 +70,14 @@ extract_get_report_args(Arg) ->
                                            lists:zipwith(fun(Str,Multiplier) -> list_to_integer(Str) * Multiplier end,
                                                          [ByMonthsStr, ByWeeksStr, ByDaysStr, ByHoursStr, ByMinutesStr],
                                                          [30*24*3600,  7*24*3600,  24*3600,   3600,       60])),
-                          {ok, #report_in{deal_name=Name,
-                                          from_timestamp=FromTimestamp,
-                                          to_timestamp=ToTimestamp,
-                                          by_timestamp=By}};
+                          if
+                              ?report_in_spec(Name, FromTimestamp, ToTimestamp, By) ->
+                                  {ok, #report_in{deal_name=Name,
+                                                  from_timestamp=FromTimestamp,
+                                                  to_timestamp=ToTimestamp,
+                                                  by_timestamp=By}};
+                              true -> undefined
+                          end;
                       _ -> undefined
                   end;
               _ -> undefined
