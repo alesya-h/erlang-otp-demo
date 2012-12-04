@@ -3,14 +3,15 @@
   <head>
     <title>ECHO test task</title>
     <meta charset="utf8"/>
-    <link rel="stylesheet" href="style.css" type="text/css" />
-    <script src="jquery-1.8.3.min.js"></script>
-    <script src="js-webshim.min/extras/modernizr-custom.js"></script>
-    <script src="js-webshim.min/polyfiller.js"></script>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/js-webshim.min/extras/modernizr-custom.js"></script>
+    <script src="js/js-webshim.min/polyfiller.js"></script>
     <script>
-      $.webshims.polyfill(); //or load only specific features you need
       $(function(){
-          //use all implemented API-features on DOM-ready
+          $.webshims.activeLang("en");
+          $.webshims.modules["jquery-ui"].src = "../../jquery-ui-1.9.2.custom.min.js";
+          $.webshims.polyfill("forms forms-ext");
       });
     </script>
   </head>
@@ -49,7 +50,7 @@
             <erl>
               out(Arg) ->
                   case web_helper:extract_add_deal_args(Arg) of
-                      {ok, Deal} -> deal_server:add(Deal);
+                      {ok, Deal} -> deal_server:add_deal(Deal);
                       _ -> ok
                   end,
                   {ehtml, web_helper:deals_to_html(deal_server:get_all())}.

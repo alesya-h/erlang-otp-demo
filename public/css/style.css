@@ -35,9 +35,9 @@ td {
     padding: 5px;
 }
 
-.main .content {
-    min-height: 400px;
+.main .inner_frame {
     margin: 20px;
+    line-height: 2em;
     border-radius: 25px;
     padding: 20px;
     background: white;

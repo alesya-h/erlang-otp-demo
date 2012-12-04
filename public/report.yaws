@@ -1,0 +1,84 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <title>ECHO test task</title>
+    <meta charset="utf8"/>
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <script src="js/jquery-1.8.3.min.js"></script>
+    <script src="js/js-webshim.min/extras/modernizr-custom.js"></script>
+    <script src="js/js-webshim.min/polyfiller.js"></script>
+    <script>
+      $(function(){
+          $.webshims.activeLang("en");
+          $.webshims.modules["jquery-ui"].src = "../../jquery-ui-1.9.2.custom.min.js";
+          $.webshims.polyfill("forms forms-ext");
+          $("input.pluralizer").change(function(event) {
+              self = $(event.target).first();
+              var name = self.attr("name");
+              selector = name.replace(/by_(\w+)s/,".$1_plural");
+              if(self.val() == 1) { $(selector).hide() } else { $(selector).show() };
+          });
+          $("input").trigger("change");
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Deal processing</h1>
+      </header>
+      <div class="main">
+        <nav class="left-menu">
+          <ul>
+          <li><a href="/deals.yaws">Deals</a></li>
+          <li><a href="/report.yaws">Report</a></li>
+          </ul>
+          <div class="clear"></div>
+        </nav>
+        <div class="inner_frame">
+          <form method="post" action="/report.yaws" onsubmit="return true;">
+            I want to get deals report for paper with name <input required="required" name="name" type="text" size="10" placeholder="e.g. ECHO" autofocus="autofocus" />.
+            I'm interested only in deals, which took place between
+                <erl>
+                  out(_Arg) ->
+                      {Date, _Time} = time_helper:timestamp_to_date_and_time(time_helper:now_to_timestamp(now()) - 3600*24*365),
+                      {ehtml, [{input, [{required, "required"}, {name, "from_date"}, {type, "date"}, {value, Date}]},
+                               {input, [{required, "required"}, {name, "from_time"}, {type, "time"}, {value, "00:00"}]}]}.
+                </erl>
+                and
+                <erl>
+                  out(_Arg) ->
+                      {Date, _Time} = time_helper:now_to_date_and_time(now()),
+                      {ehtml, [{input, [{required, "required"}, {name, "to_date"}, {type, "date"}, {value, Date}]},
+                               {input, [{required, "required"}, {name, "to_time"}, {type, "time"}, {value, "23:59"}]}]}.
+                </erl>.
+                Each report entry should be exactly
+                <input class="pluralizer" required="required" name="by_months"  type="number" min="0" value="0" size="4"> month<span class="month_plural">s</span><!-- <sup><a href="#months_desc">*</a></sup> -->,
+                <input class="pluralizer" required="required" name="by_weeks"   type="number" min="0" value="1" size="2"> week<span class="week_plural">s</span>,
+                <input class="pluralizer" required="required" name="by_days"    type="number" min="0" value="0" size="2"> day<span class="day_plural">s</span>,
+                <input class="pluralizer" required="required" name="by_hours"   type="number" min="0" value="0" size="2"> hour<span class="hour_plural">s</span> and
+                <input class="pluralizer" required="required" name="by_minutes" type="number" min="0" value="0" size="2"> minute<span class="minute_plural">s</span> long.
+                <br><input required="required" type="submit" value="Generate report"/>
+          </form>
+        </div>
+          <table>
+            <tr>
+              <th>Opening time</th><th>Opening cost</th><th>Closing cost</th><th>Minimal cost</th><th>Maximal cost</th><th>Quantity</th>
+            </tr>
+            <erl>
+              out(Arg) ->
+                  ReportArgs = web_helper:extract_get_report_args(Arg),
+                  case ReportArgs of
+                      {ok, ReportIn} ->
+                           {ehtml, web_helper:report_to_html(ReportIn, deal_server:gen_report(ReportIn))};
+                      _ -> ok
+                  end.
+            </erl>
+          </table>
+      </div>
+      <footer>
+        &copy; Ales Guzik, 2012
+      </footer>
+    </div>
+  </body>
+</html>
