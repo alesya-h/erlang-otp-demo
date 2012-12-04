@@ -82,4 +82,16 @@ Two macros are used to save some typing.
 ?If(Condition, PosExpr, NegExpr)
      used where ternary operator would come in handy.
 
+** Data storage
 
+ETS is used to store data in memory. Collection type is duplicate_bag, so we can have multiple deals with same parameters.
+
+** Helper modules
+
+*** web_helper module
+
+This module is used as a place for all frontend-related functions. This module is, among outhers, responsible for rendering deal records and reports.
+
+*** time_helper module
+
+Functions for dealing with date/time formats. Time format conversion functions reside here.
