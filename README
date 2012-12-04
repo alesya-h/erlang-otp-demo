@@ -1,0 +1,85 @@
+* General questions
+
+** Build and run
+
+$ git clone <repo_name> deal_system
+$ cd deal_system
+$ make
+$ make run
+
+You should see something like "Yaws: Listening to 0.0.0.0:8080 for <1>
+virtual servers". Open http://localhost:8080 in your browser.
+
+** Populate test data
+
+Ensure that server is running. Then issue from project directory
+
+$ make init
+
+** To change server port
+
+Open deal_system.app in text editor, find line "{mod, {deal_system,
+8080}}]}.", replace 8080 with port you need.
+
+** To delete cleanup project (delete *.beam files, logs, editor
+   autosaves, tags, etc.)
+
+$ make clean
+
+** To manually regenerate tags
+
+$ make tags
+
+Tags are generated automatically on every build, so you unlikely will need this.
+
+** Run dialyzer
+
+$ make dialyzer
+
+This will do cleanup, rebuild with +debug_info and run dialyzer.
+
+* Technical information
+
+** Overview
+
+OTP application. Yaws is used as embedded web server. Supervisor hierarchy is
+  deal_system (supervisor)
+  | \_ deal_server_sup (supervisor)
+  |     \_ deal_server (worker, gen_server)
+  \__ deals_yaws_sup (supervisor)
+       \_ deals_yaws (worker)
+
+** Data types / records
+
+Application uses 3 record types: #deal{}, #report_in{} and
+#report_out{}. This types specify internal protocols. To put some
+constraints on this data, macros which generate guard expressions
+are used. Macro names are ?deal_spec(), ?report_in_spec() and
+?report_out_spec(). Records and macros are stored in "deal_system.hrl".
+
+Also there are 4 date/time representations used:
+   now   - a tuple of form {Megaseconds, Seconds, Microseconds},
+           returned by erlang:now() BIF, may be thought of as just precise unixtime.
+   datetime - tuple of form {{Year, Month, Day}, {Hours, Minutes,
+              Seconds}}, may be converted from now() by
+              calendar:now_to_universal_time/1.
+   timestamp - unixtime, number of seconds from 00:00 1 january 1970,
+               used by application internally to store and represent
+               time.
+   date_and_time - tuple of form {Date, Time}, where Date and Time are
+               strings in RFC3339 format. Used to set initial data in
+               date and time form elements. Also used to display date
+               and time to user.
+
+** Utility macros
+
+Two macros are used to save some typing.
+
+?f(Format, Args)
+     a shortcut for lists:flatten(io_lib:format(Format,
+     Args)). Similar macro is provided by yaws_api in yaws templates.
+
+?If(Condition, PosExpr, NegExpr)
+     used where ternary operator would come in handy.
+
+
