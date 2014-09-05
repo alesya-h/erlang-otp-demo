@@ -36,7 +36,7 @@
 
 -undef(f).
 -define(f(Template, Args),
-        (.lists:flatten(io_lib:format(Template,Args)))).
+        (lists:flatten(io_lib:format(Template,Args)))).
 
 -undef(If).
 -define(If(Statement, PosResult, NegResult),
